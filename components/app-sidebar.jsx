@@ -1,9 +1,7 @@
 
 import {
   Search,
-  ChartLine,
   ChevronRightIcon,
-  Container,
   Truck,
   Compass
 } from "lucide-react";
@@ -19,8 +17,10 @@ import {
   SidebarMenuSub,
   SidebarMenuSubItem,
   SidebarMenuSubButton,
+  SidebarGroupLabel,
   SidebarInput,
   SidebarHeader,
+  SidebarRail
 } from "@/components/ui/sidebar";
 
 import {
@@ -74,10 +74,11 @@ export function AppSidebar() {
       <SidebarHeader >
         <SidebarGroup className="py-0 group-data-[collapsible=icon]:hidden">
           <SidebarGroupContent>
+            <SidebarGroupLabel>Search</SidebarGroupLabel>
             <form className="relative">
               <SidebarInput
                 id="search"
-                placeholder="Shipment or Vehicle"
+                placeholder="Shipment, Vehicle, Log"
                 className="pl-8"
               />
               <Search className="pointer-events-none absolute top-1/2 left-2 size-4 -translate-y-1/2 opacity-50 select-none" />
@@ -89,7 +90,8 @@ export function AppSidebar() {
 
       <SidebarContent>
         <SidebarGroup >
-        <SidebarMenu>
+          <SidebarMenu>
+            <SidebarGroupLabel>Menu</SidebarGroupLabel>
             {navMenu.map((item) => (
               <Collapsible
                 key={item.title}
@@ -123,9 +125,9 @@ export function AppSidebar() {
             ))}
           </SidebarMenu>
         </SidebarGroup>
-
-        <SidebarGroup />
       </SidebarContent>
+
+      <SidebarRail />
     </Sidebar>
   );
 }

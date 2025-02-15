@@ -1,3 +1,5 @@
+'use client';
+import { usePathname } from 'next/navigation';
 
 import {
   Search,
@@ -20,7 +22,8 @@ import {
   SidebarGroupLabel,
   SidebarInput,
   SidebarHeader,
-  SidebarRail
+  SidebarRail,
+  SidebarFooter
 } from "@/components/ui/sidebar";
 
 import {
@@ -71,25 +74,22 @@ const navMenu = [
 export function AppSidebar() {
   return (
     <Sidebar className="top-(--delta) h-[calc(100svh-var(--delta))]! [--delta:calc(var(--header-height)+1px)]">
-      <SidebarHeader >
+      <SidebarHeader>
         <SidebarGroup className="py-0 group-data-[collapsible=icon]:hidden">
           <SidebarGroupContent>
             <SidebarGroupLabel>Search</SidebarGroupLabel>
-            <form className="relative">
-              <SidebarInput
-                id="search"
-                placeholder="Shipment, Vehicle, Log"
-                className="pl-8"
-              />
-              <Search className="pointer-events-none absolute top-1/2 left-2 size-4 -translate-y-1/2 opacity-50 select-none" />
-            </form>
+            <SidebarMenuButton asChild isActive={usePathname() === '/search'}>
+              <a href='/search'>
+                <Search />
+                <span>Shipment, Vehicle, Logs</span>
+              </a>
+            </SidebarMenuButton>
           </SidebarGroupContent>
         </SidebarGroup>
-
       </SidebarHeader>
 
       <SidebarContent>
-        <SidebarGroup >
+        <SidebarGroup>
           <SidebarMenu>
             <SidebarGroupLabel>Menu</SidebarGroupLabel>
             {navMenu.map((item) => (
@@ -111,7 +111,7 @@ export function AppSidebar() {
                     <SidebarMenuSub>
                       {item.items?.map((subItem) => (
                         <SidebarMenuSubItem key={subItem.title}>
-                          <SidebarMenuSubButton asChild>
+                          <SidebarMenuSubButton asChild isActive={subItem.url === usePathname()}>
                             <a href={subItem.url}>
                               <span>{subItem.title}</span>
                             </a>
@@ -126,7 +126,6 @@ export function AppSidebar() {
           </SidebarMenu>
         </SidebarGroup>
       </SidebarContent>
-
       <SidebarRail />
     </Sidebar>
   );

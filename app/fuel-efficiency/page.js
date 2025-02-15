@@ -35,7 +35,7 @@ import {
 import { Fuel, Bug } from 'lucide-react';
 
 const formSchema = z.object({
-    vehicleId: z.string().trim().regex(/^V-(0[0-9]{2}|[1-9][0-9]{2})$/, { message: "Enter Valid ID" }),
+    vehicleId: z.string().trim().regex(/^V-(0{2}[1-9]|[1-9][0-9]{2})$/, { message: "Enter Valid ID" }),
     operation: z.enum(["average", "maximum", "minimum"]).default("average"),
 });
 

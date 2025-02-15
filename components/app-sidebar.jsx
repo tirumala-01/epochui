@@ -60,8 +60,8 @@ const navMenu = [
         url: "/delivery-time",
       },
       {
-        title: "Cost",
-        url: "/cost",
+        title: "Shipment Cost",
+        url: "/shipment-cost",
       },
       {
         title: "Expensive Routes",

@@ -24,6 +24,13 @@ import {
     CardTitle,
 } from "@/components/ui/card";
 
+import {
+    Table,
+    TableBody,
+    TableCell,
+    TableRow,
+} from "@/components/ui/table";
+
 import { Earth, Bug } from 'lucide-react';
 
 const formSchema = z.object({
@@ -116,10 +123,16 @@ export default function TotalMileage() {
                                 <CardTitle>Distance and Fuel</CardTitle>
                             </CardHeader>
                             <CardContent>
-                                <p>ID: {vehicle_data.vehicle_full_id}</p>
-                                <p>Name: {vehicle_data.vehicle_name}</p>
-                                <p>Distance Travelled: {vehicle_data.total_distance_travelled}</p>
-                                <p>Fuel Consumed: {vehicle_data.total_fuel_consumed}</p>
+                                <Table>
+                                    <TableBody>
+                                        {Object.entries(vehicle_data).map((x) => (
+                                            <TableRow key={x[0]}>
+                                                <TableCell>{x[0]}</TableCell>
+                                                <TableCell className="text-right">{x[1]}</TableCell>
+                                            </TableRow>
+                                        ))}
+                                    </TableBody>
+                                </Table>
                             </CardContent>
                             <CardFooter>
                                 <Earth />

@@ -32,6 +32,13 @@ import {
     CardTitle,
 } from "@/components/ui/card";
 
+import {
+    Table,
+    TableBody,
+    TableCell,
+    TableRow,
+} from "@/components/ui/table";
+
 import { Fuel, Bug } from 'lucide-react';
 
 const formSchema = z.object({
@@ -153,9 +160,16 @@ export default function FuelEfficiency() {
                                 <CardTitle>{vehicle_data.operation} Fuel Efficiency</CardTitle>
                             </CardHeader>
                             <CardContent>
-                                <p>ID: {vehicle_data.vehicle_full_id}</p>
-                                <p>Name: {vehicle_data.vehicle_name}</p>
-                                <p>Mileage Per Liter: {vehicle_data.mileage_per_liter}</p>
+                                <Table>
+                                    <TableBody>
+                                        {Object.entries(vehicle_data).map((x) => (
+                                            <TableRow key={x[0]}>
+                                                <TableCell>{x[0]}</TableCell>
+                                                <TableCell className="text-right">{x[1]}</TableCell>
+                                            </TableRow>
+                                        ))}
+                                    </TableBody>
+                                </Table>
                             </CardContent>
                             <CardFooter>
                                 <Fuel />

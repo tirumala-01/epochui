@@ -24,6 +24,13 @@ import {
     CardTitle,
 } from "@/components/ui/card";
 
+import {
+    Table,
+    TableBody,
+    TableCell,
+    TableRow,
+} from "@/components/ui/table";
+
 import { FileSearch, Bug } from 'lucide-react';
 
 const formSchema = z.object({
@@ -149,32 +156,16 @@ export default function Search() {
                                 <CardTitle>{resource_data.resourceType} Details</CardTitle>
                             </CardHeader>
                             <CardContent>
-                                <p>ID: {resource_data.vehicle_id}</p>
-                                <p>Name: {resource_data.name}</p>
-                                {!resource_data.shipment_id && !resource_data.log_id && (
-                                    <p>Total Mileage: {resource_data.total_mileage} kms</p>
-                                )}
-                                {resource_data.shipment_id && (
-                                    <div>
-                                        <p>Shipment ID: {resource_data.shipment_id}</p>
-                                        <p>Origin: {resource_data.origin}</p>
-                                        <p>Destination: {resource_data.destination}</p>
-                                        <p>Weight: {resource_data.weight}</p>
-                                        <p>Cost: {resource_data.cost}</p>
-                                        <p>Delivery Time: {resource_data.delivery_time}</p>
-                                        <p>Trip Date: {resource_data.trip_date}</p>
-                                        <p>Mileage: {resource_data.mileage} kms</p>
-                                        <p>Fuel Used: {resource_data.fuel_used} liters</p>
-                                    </div>
-                                )}
-
-                                {!resource_data.shipment_id && resource_data.log_id && (
-                                    <div>
-                                        <p>Trip Date: {resource_data.trip_date}</p>
-                                        <p>Mileage: {resource_data.mileage} kms</p>
-                                        <p>Fuel Used: {resource_data.fuel_used} liters</p>
-                                    </div>
-                                )}
+                            <Table>
+                                    <TableBody>
+                                        {Object.entries(resource_data).map((x) => (
+                                            <TableRow key={x[0]}>
+                                                <TableCell>{x[0]}</TableCell>
+                                                <TableCell className="text-right">{x[1]}</TableCell>
+                                            </TableRow>
+                                        ))}
+                                    </TableBody>
+                                </Table>
                             </CardContent>
                             <CardFooter>
                                 <FileSearch />

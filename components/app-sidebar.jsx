@@ -41,8 +41,8 @@ const navMenu = [
         url: "/fuel-efficiency",
       },
       {
-        title: "Vehicle highlights",
-        url: "/vehicle-highlights",
+        title: "Total Mileage and Fuel",
+        url: "/total-mileage",
       }
     ]
   },

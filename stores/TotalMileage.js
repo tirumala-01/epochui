@@ -3,22 +3,20 @@ import apiClient from '@/lib/apiClient.js';
 
 
 const dummy = {
-    "vehicle_id": 8,
-    "vehicle_full_id": "V-020",
-    "vehicle_name": "Vehicle 20",
-    "mileage_per_liter": 15.5,
-    "operation": "Average",
-};
+    "vehicle_id" : 1,
+    "vehicle_full_id" : "V-001",
+    "vehicle_name" : "Vehicle 1",
+    "total_distance_travelled" : 6518098.08,
+    "total_fuel_consumed" : 690263.29
+}
 
-const useFuelEfficiencyStore = create((set, get) => ({
+const useTotalMileageStore = create((set, get) => ({
     vehicleId: null,
-    operation: null,
-
     vehicle_data: null,
     vehicle_data_loading: false,
     vehicle_data_error: null,
 
-    fetchData: async () => {
+    fetchData: async (vehicleId) => {
         set({ vehicle_data_loading: true });
         try {
             const response = await apiClient.get(`/recipes/1`);
@@ -41,4 +39,4 @@ const useFuelEfficiencyStore = create((set, get) => ({
 }));
 
 
-export default useFuelEfficiencyStore;
+export default useTotalMileageStore;

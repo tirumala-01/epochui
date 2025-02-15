@@ -4,7 +4,7 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { Button } from "@/components/ui/button";
-import useFuelEfficiencyStore from "@/stores/FuelEfficiency";
+import useTotalMileageStore from "@/stores/TotalMileage";
 import {
     Form,
     FormControl,
@@ -16,14 +16,6 @@ import {
 import { Input } from "@/components/ui/input";
 
 import {
-    Select,
-    SelectContent,
-    SelectItem,
-    SelectTrigger,
-    SelectValue,
-} from "@/components/ui/select";
-
-import {
     Card,
     CardContent,
     CardDescription,
@@ -32,26 +24,21 @@ import {
     CardTitle,
 } from "@/components/ui/card";
 
-import { Fuel, Bug } from 'lucide-react';
+import { Earth, Bug } from 'lucide-react';
 
 const formSchema = z.object({
-    vehicleId: z.string().trim().regex(/^V-(0[0-9]{2}|[1-9][0-9]{2})$/, { message: "Enter Valid ID" }),
-    operation: z.enum(["average", "maximum", "minimum"]).default("average"),
+    vehicleId: z.string().trim().regex(/^V-(0[0-9]{2}|[1-9][0-9]{2})$/, { message: "Enter Valid ID" })
 });
 
-
-export default function FuelEfficiency() {
-    let { fetchData, vehicle_data, vehicle_data_loading, vehicle_data_error, reset } = useFuelEfficiencyStore();
+export default function TotalMileage() {
+    let { fetchData, vehicle_data, vehicle_data_loading, vehicle_data_error, reset } = useTotalMileageStore();
 
     const form = useForm({
         resolver: zodResolver(formSchema),
         defaultValues: {
             vehicleId: "",
-            operation: "average",
         },
     });
-
-
 
     async function onSubmit(values) {
         try {
@@ -76,8 +63,8 @@ export default function FuelEfficiency() {
                         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
                             <Card className="w-full sm:w-[350px]">
                                 <CardHeader>
-                                    <CardTitle>Fuel Efficiency</CardTitle>
-                                    <CardDescription>Check mileage per liter.</CardDescription>
+                                    <CardTitle>Total Mileage and Fuel Usage</CardTitle>
+                                    <CardDescription>Check distance travelled and fuel consumed.</CardDescription>
                                 </CardHeader>
                                 <CardContent className="grid gap-4">
 
@@ -94,30 +81,6 @@ export default function FuelEfficiency() {
                                             </FormItem>
                                         )}
                                     />
-
-                                    <FormField
-                                        control={form.control}
-                                        name="operation"
-                                        render={({ field }) => (
-                                            <FormItem>
-                                                <FormLabel>Efficiency Type</FormLabel>
-                                                <Select onValueChange={field.onChange} defaultValue={field.value}>
-                                                    <FormControl>
-                                                        <SelectTrigger>
-                                                            <SelectValue />
-                                                        </SelectTrigger>
-                                                    </FormControl>
-                                                    <SelectContent>
-                                                        <SelectItem value="average" selected>Average</SelectItem>
-                                                        <SelectItem value="maximum">Maximum</SelectItem>
-                                                        <SelectItem value="minimum">Minimum</SelectItem>
-                                                    </SelectContent>
-                                                </Select>
-                                                <FormMessage />
-                                            </FormItem>
-                                        )}
-                                    />
-
                                 </CardContent>
                                 <CardFooter className="flex justify-between">
                                     <Button variant="outline" onClick={handleReset}>Reset</Button>
@@ -150,15 +113,16 @@ export default function FuelEfficiency() {
                     <div className="w-full sm:w-auto">
                         <Card className="w-full sm:w-[350px]">
                             <CardHeader>
-                                <CardTitle>{vehicle_data.operation} Fuel Efficiency</CardTitle>
+                                <CardTitle>Distance and Fuel</CardTitle>
                             </CardHeader>
                             <CardContent>
                                 <p>ID: {vehicle_data.vehicle_full_id}</p>
                                 <p>Name: {vehicle_data.vehicle_name}</p>
-                                <p>Mileage Per Liter: {vehicle_data.mileage_per_liter}</p>
+                                <p>Distance Travelled: {vehicle_data.total_distance_travelled}</p>
+                                <p>Fuel Consumed: {vehicle_data.total_fuel_consumed}</p>
                             </CardContent>
                             <CardFooter>
-                                <Fuel />
+                                <Earth />
                             </CardFooter>
                         </Card>
                     </div>

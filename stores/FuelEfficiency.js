@@ -2,14 +2,6 @@ import { create } from 'zustand';
 import apiClient from '@/lib/apiClient.js';
 
 
-const dummy = {
-    "vehicle_id": 8,
-    "vehicle_full_id": "V-020",
-    "vehicle_name": "Vehicle 20",
-    "mileage_per_liter": 15.5,
-    "operation": "Average",
-};
-
 const useFuelEfficiencyStore = create((set, get) => ({
     vehicleId: null,
     operation: null,
@@ -18,11 +10,27 @@ const useFuelEfficiencyStore = create((set, get) => ({
     vehicle_data_loading: false,
     vehicle_data_error: null,
 
-    fetchData: async () => {
+    fetchData: async (values) => {
         set({ vehicle_data_loading: true });
         try {
-            const response = await apiClient.get(`/recipes/1`);
-            set({ vehicle_data: dummy });
+            const response = await apiClient.get(`/vehicles/fuel-efficiency/${values.vehicleId}?operation=${values.operation}`);
+            if (response.status >= 200 && response.status < 300) {
+                const mappedData = {
+                    ...Object.fromEntries(
+                        Object.entries(response.data).filter(
+                            ([key]) => !key.endsWith('vehicle_id')
+                        )
+                    )
+                };
+
+                if (mappedData['vehicle_full_id']) {
+                    mappedData['vehicle_id'] =mappedData['vehicle_full_id'];
+                    delete mappedData['vehicle_full_id'];
+                }
+                set({ vehicle_data: mappedData });
+            } else {
+                set({ vehicle_data_error: `Error: ${response.statusText}` });
+            }
         } catch (error) {
             set({ vehicle_data_error: error.message });
         } finally {

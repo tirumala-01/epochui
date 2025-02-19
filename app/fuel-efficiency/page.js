@@ -58,8 +58,6 @@ export default function FuelEfficiency() {
         },
     });
 
-
-
     async function onSubmit(values) {
         try {
             await fetchData(values);
@@ -127,7 +125,7 @@ export default function FuelEfficiency() {
 
                                 </CardContent>
                                 <CardFooter className="flex justify-between">
-                                    <Button variant="outline" onClick={handleReset}>Reset</Button>
+                                    <Button type="button" variant="outline" onClick={handleReset}>Reset</Button>
                                     <Button type="submit" disabled={vehicle_data_loading}>
                                         {vehicle_data_loading ? "Loading..." : "Submit"}
                                     </Button>
@@ -162,12 +160,15 @@ export default function FuelEfficiency() {
                             <CardContent>
                                 <Table>
                                     <TableBody>
-                                        {Object.entries(vehicle_data).map((x) => (
-                                            <TableRow key={x[0]}>
-                                                <TableCell>{x[0]}</TableCell>
-                                                <TableCell className="text-right">{x[1]}</TableCell>
-                                            </TableRow>
-                                        ))}
+                                        {Object.entries(vehicle_data).map(([key, value]) => {
+                                            const renamedKey = key.replace(/_/g, ' ').replace(/\b\w/g, char => char.toUpperCase());
+                                            return (
+                                                <TableRow key={key}>
+                                                    <TableCell>{renamedKey}</TableCell>
+                                                    <TableCell className="text-right">{value}</TableCell>
+                                                </TableRow>
+                                            );
+                                        })}
                                     </TableBody>
                                 </Table>
                             </CardContent>

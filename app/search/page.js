@@ -34,26 +34,24 @@ import {
 import { FileSearch, Bug } from 'lucide-react';
 
 const formSchema = z.object({
-    id: z.string().trim().regex(/^(?:[LS]-(0{5}[1-9]|[1-9][0-9]{5})|V-(0{2}[1-9]|[1-9][0-9]{2}))$/, { message: "Enter Valid ID" })
+    id: z.string().trim()
 });
 
-function findPattern(value) {
+function validatePattern(value) {
     const patterns = [
         { name: "shipment_id", regex: /^(S-(0{5}[1-9]|[1-9][0-9]{5}))$/ },
         { name: "log_id", regex: /^(L-(0{5}[1-9]|[1-9][0-9]{5}))$/ },
         { name: "vehicle_id", regex: /^V-(0{2}[1-9]|[1-9][0-9]{2})$/ }
     ];
 
-    const matchedPattern = patterns.find(({ regex }) => regex.test(value.id));
-    return matchedPattern ? matchedPattern.name : '';
+    const matchedPattern = patterns.find(({ regex }) => regex.test(value));
+    return matchedPattern ? true : false;
 };
 
 
 export default function Search() {
     let {
-        fetchVehicle,
-        fetchShipment,
-        fetchLog,
+        fetchResource,
         reset,
         resource_data,
         resource_data_loading,
@@ -67,23 +65,9 @@ export default function Search() {
         },
     });
 
-    async function onSubmit(value) {
+    async function onSubmit(resource) {
         try {
-            let resource = findPattern(value);
-            switch (resource) {
-                case 'shipment_id':
-                    await fetchShipment(value);
-                    break;
-                case 'log_id':
-                    await fetchLog(value);
-                    break;
-                case 'vehicle_id':
-                    await fetchVehicle(value);
-                    break;
-                default:
-                    form.setError("id", { message: "Invalid ID" });
-                    break;
-            }
+            validatePattern(resource.id) ? await fetchResource(resource.id) : form.setError("id", { message: "Invalid ID" });
         } catch (error) {
             form.setError("id", { message: error.message });
             console.error(error);
@@ -123,7 +107,7 @@ export default function Search() {
                                     />
                                 </CardContent>
                                 <CardFooter className="flex justify-between">
-                                    <Button variant="outline" onClick={handleReset}>Reset</Button>
+                                <Button type="button" variant="outline" onClick={handleReset}>Reset</Button>
                                     <Button type="submit" disabled={resource_data_loading}>
                                         {resource_data_loading ? "Loading..." : "Submit"}
                                     </Button>
@@ -153,17 +137,20 @@ export default function Search() {
                     <div className="w-full sm:w-auto">
                         <Card className="w-full sm:w-[350px]">
                             <CardHeader>
-                                <CardTitle>{resource_data.resourceType} Details</CardTitle>
+                                <CardTitle> Details</CardTitle>
                             </CardHeader>
                             <CardContent>
                             <Table>
                                     <TableBody>
-                                        {Object.entries(resource_data).map((x) => (
-                                            <TableRow key={x[0]}>
-                                                <TableCell>{x[0]}</TableCell>
-                                                <TableCell className="text-right">{x[1]}</TableCell>
-                                            </TableRow>
-                                        ))}
+                                        {Object.entries(resource_data).map(([key, value]) => {
+                                            const renamedKey = key.replace(/_/g, ' ').replace(/\b\w/g, char => char.toUpperCase());
+                                            return (
+                                                <TableRow key={key}>
+                                                    <TableCell>{renamedKey}</TableCell>
+                                                    <TableCell className="text-right">{value}</TableCell>
+                                                </TableRow>
+                                            );
+                                        })}
                                     </TableBody>
                                 </Table>
                             </CardContent>
